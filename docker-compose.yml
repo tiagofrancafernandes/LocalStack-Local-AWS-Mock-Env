@@ -3,16 +3,23 @@ version: "3.8"
 services:
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
-    image: localstack/localstack
+    # image: localstack/localstack
+    image: localstack/localstack:0.12.11
     ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+      - "0.0.0.0:4566:4566" # LocalStack Gateway
+      - "0.0.0.0:4510-4559:4510-4559" # external services port range
     environment:
       - DEBUG=${DEBUG-}
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - SERVICES=${SERVICES:-sqs,s3}
+      - SERVICES=${SERVICES:-sns,sqs,s3}
+      - PERSISTENCE=1
+      - START_WEB=1
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
     volumes:
+      - "${LOCALSTACK_ETC_HOSTS:-/etc/hosts}:/etc/hosts"
       - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "./:/var/host_path"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - ./init-scripts:/docker-entrypoint-initaws.d
     networks:

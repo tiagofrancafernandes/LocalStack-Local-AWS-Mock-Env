@@ -22,7 +22,7 @@ echo 'Subscribing SNS topic'
 awslocal sns subscribe \
    --topic-arn arn:aws:sns:us-east-1:000000000000:local-sns-export-teste1 \
    --protocol http \
-   --notification-endpoint http://l-comptradeweb.compart.com.br:8003/webhooks/incoming
+   --notification-endpoint http://customer1.myapp.local:8003/webhooks/incoming
 echo '------------------------------------------'
 
 echo '------------------------------------------'
